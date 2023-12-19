@@ -12,27 +12,33 @@ class CalculatorTest {
 	@Test
 	void basic_addition_2_plus_3_equals_5() {
 		
-		assertEquals(5, calculator.add((double) 2, (double) 3));
+		assertEquals(5, calculator.add(2, 3));
 		
 	}
 	
 	@Test
 	void basic_subtraction_3_minus_2_equals_1() {
 		
-		assertEquals(1,calculator.minus((double) 3, (double) 2));
+		assertEquals(1, calculator.minus(3, 2));
 		
 	}
 	
 	@Test
 	void basic_multiplication_3_multiply_2_equals_6() {
 		
-		assertEquals(6, calculator.multiply((double) 3, (double) 2));
+		assertEquals(6, calculator.multiply(3, 2));
 	}
 	
 	@Test
 	void basic_division_6_divide_2_equals_3() {
 		
-		assertEquals(3,calculator.divide((double) 6, (double) 2));
+		assertEquals(3, calculator.divide(6, 2));
+	}
+	
+	@Test
+	void basic_division_dividing_by_zero() {
+		
+		assertThrows(IllegalArgumentException.class, () -> {calculator.divide(0, 0);});
 	}
 	
 	// Tests for invalid arguments
@@ -65,6 +71,12 @@ class CalculatorTest {
 	void invalid_operator_leading_asterisk_at_the_end() {
 		
 		assertThrows(IllegalArgumentException.class, () -> {calculator.evaluate("1+1+*1");});
+	}
+	
+	@Test
+	void invalid_operator_leading_slash_at_the_end() {
+		
+		assertThrows(IllegalArgumentException.class, () -> {calculator.evaluate("1+1+/1");});
 	}
 	
 	// Tests for performing basic operations from string input
@@ -180,20 +192,20 @@ class CalculatorTest {
 	}
 	
 	@Test
-	void multiple_double_operations_1_plus_2_plus_3_equals_6() {
+	void multiple_double_operators_1_plus_2_plus_3_equals_6() {
 		
 		assertEquals(6, calculator.evaluate("1++2++3"));
 	}
 	
 	@Test
-	void multiple_double_operator_times_minus_double_operator() {
+	void multiple_double_operators_times_minus() {
 		double result = 1*-4*-4;
 		
 		assertEquals(result, calculator.evaluate("1*-4*-4"));
 	}
 	
 	@Test
-	void multiple_operations_with_times_plus_double_operator() {
+	void multiple_double_operators_times_plus() {
 		double result = 1*+4*+4;
 		
 		assertEquals(result, calculator.evaluate("1*+4*+4"));
@@ -445,6 +457,12 @@ class CalculatorTest {
 	}
 	
 	@Test
+	void single_exponent_zero_raised_to_zero() {
+		
+		assertThrows(IllegalArgumentException.class, () -> {calculator.power(0,0);});
+	}
+	
+	@Test
 	void single_exponent_operation_decimal_base() {
 		double result = Math.pow(2.8, 2);
 		
@@ -481,6 +499,7 @@ class CalculatorTest {
 		assertEquals(result, calculator.evaluate("2^(2*2)"));
 	}
 	
+	
 	@Test
 	void nested_exponent_operation_with_brackets() {
 		
@@ -511,6 +530,12 @@ class CalculatorTest {
 		assertEquals(result, calculator.evaluate("2 * (3 + (4 - 1) * (6 / 2))^2"));
 	}
 	
+	@Test
+	void BODMAS_check() {
+		double result = 5-4+8*3/4*Math.pow(2, 2)-(7-4);
+		
+		assertEquals(result, calculator.evaluate("5-4+8*3/4*2^2-(7-4)"));
+	}
 	@Test
 	void final_test_all_operations() {
 		

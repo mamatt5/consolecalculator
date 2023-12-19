@@ -82,7 +82,7 @@ public class Calculator implements ICalculator {
 
 	public double power(double base, double exponent) {
 
-		if ( exponent == 0 ) {
+		if ( exponent == 0 && base !=0 ) {
 
 			return 1;
 		}
@@ -90,6 +90,11 @@ public class Calculator implements ICalculator {
 		if ( exponent < 0 ) {
 
 			return 1 / power(base, -exponent);
+		}
+		
+		if ( exponent == 0 && base == 0) {
+			
+			throw new IllegalArgumentException("Zero raised to zero is undefined");
 		}
 
 		return base * power(base, exponent - 1);
@@ -208,7 +213,6 @@ public class Calculator implements ICalculator {
 
 	private double performParenthesesOperations(String expression) {
 		expression = expression.replaceAll(" ", "");
-		expression = cleanExpression(expression);
 		expression = simplifyExpression(expression);
 		
 
@@ -301,7 +305,6 @@ public class Calculator implements ICalculator {
 		if (index < 0 || isOperator(expression.charAt(index))) {
 			return index + 1;
 		}
-		
 
 		return findBaseStart(expression, index - 1);
 	}

@@ -53,7 +53,7 @@ public class Calculator implements ICalculator {
 
 
 	/**
-	 * Basic division operation
+	 * Basic division operation. Throws an exception if dividing by zero.
 	 * @param x Dividend
 	 * @param y Divisor
 	 * @return The quotient of x when divided by y.
@@ -273,14 +273,14 @@ public class Calculator implements ICalculator {
 		}
 
 		// Find the rightmost exponential operation then evaluates
-		int start = expression.lastIndexOf('^');
+		int caretIndex = expression.lastIndexOf('^');
 		
 		// Splits the exponential expression into base and exponent
-		int baseStart = findBaseStart( expression, start - 1);
-		int exponentEnd = findExponentEnd( expression, start + 1);
+		int baseStart = findBaseStart( expression, caretIndex - 1);
+		int exponentEnd = findExponentEnd( expression, caretIndex + 1);
 		
-		double base = Double.parseDouble(expression.substring(baseStart, start));
-		double exponent = Double.parseDouble(expression.substring(start + 1, exponentEnd + 1));
+		double base = Double.parseDouble(expression.substring(baseStart, caretIndex));
+		double exponent = Double.parseDouble(expression.substring(caretIndex + 1, exponentEnd + 1));
 		
 		double result = power(base, exponent);
 
@@ -349,6 +349,8 @@ public class Calculator implements ICalculator {
 			return performASOperations(expression);
 		}
 		
+		
+		// Compares the indices of MD operators and executes whichever comes first
 		int mulIndex = expression.indexOf('*');
 		int divIndex = expression.indexOf('/');
 		

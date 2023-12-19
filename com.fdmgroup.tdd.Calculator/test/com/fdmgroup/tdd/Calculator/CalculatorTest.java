@@ -272,6 +272,13 @@ class CalculatorTest {
 	}
 	
 	@Test
+	void multiple_operations_with_times_plus_double_operator_multiply_divide_order_check() {
+		double result = 8/2*7/4*9;
+		
+		assertEquals(result, calculator.evaluate("8/2*7/4*9"));
+	}
+	
+	@Test
 	void multiple_operations_with_times_plus_double_operator_divided_by_negative() {
 		double result = 1*+44-5/-1;
 		
@@ -510,5 +517,13 @@ class CalculatorTest {
 		assertEquals(-90.5041667, calculator.evaluate("-3*((2)^2/5+5*8)-(4+3*(2.5^2-(1/3)^2)/4)+(7-2.5)*(6/2)^2"), 0.0001);
 
 	}
+
+	@Test
+	void final_test_all_operations_2()
+	{
+		double result = 2*((2+Math.pow(1+3,2)*2+2)+5+(2.5*20/(1+5-5*4)+2)+8/2*7+2+8*(200/5-15*5));
+		assertEquals(result, calculator.evaluate("2*((2+(1+3)^2*2+2)+5+(2.5*20/(1+5-5*4)+2)+8/2*7+2--8*(200/5-15*5))"));
+	}
+	
 	
 }

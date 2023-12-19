@@ -208,11 +208,14 @@ public class Calculator implements ICalculator {
 
 	private double performParenthesesOperations(String expression) {
 		expression = expression.replaceAll(" ", "");
-
+		expression = cleanExpression(expression);
+		expression = simplifyExpression(expression);
+		
 
 		if (!expression.contains("(")) {
 			return performExponentsOperations(expression);
 		}
+		
 
 		// Find the innermost parentheses then evaluates
 		int start = expression.lastIndexOf('(');
@@ -223,6 +226,7 @@ public class Calculator implements ICalculator {
 
 		// Updates the expression by removing brackets and calls the function again with the new expression
 		String newExpression = expression.substring(0, start) + innerResult + expression.substring(end + 1);
+
 
 		return performParenthesesOperations(newExpression);
 	}
@@ -260,6 +264,9 @@ public class Calculator implements ICalculator {
 
 	private double performExponentsOperations ( String expression ) {
 		expression = expression.replaceAll(" ", "");
+		expression = cleanExpression(expression);
+		expression = simplifyExpression(expression);
+		
 
 		if (!expression.contains("^")) {
 			return performMDOperations( expression );
@@ -336,14 +343,20 @@ public class Calculator implements ICalculator {
 		// Cleaner methods to ensure string readability for the code
 		expression = cleanExpression(expression);
 		expression = simplifyExpression(expression);
-
+		
 
 		if (!expression.contains("*") && !expression.contains("/")) {
 			return performASOperations(expression);
 		}
+		
+		int mulIndex = expression.indexOf('*');
+		int divIndex = expression.indexOf('/');
+		
 
-		if (expression.contains("*")) {
-			int index = expression.lastIndexOf("*");
+		int index;
+
+		if ( mulIndex != -1 && (divIndex == -1 || mulIndex < divIndex) )  {
+			index = mulIndex;
 
 			// This is where the expression is split into two parts
 			String left = expression.substring(extractLeftNumber(expression, index - 1), index);
@@ -355,13 +368,13 @@ public class Calculator implements ICalculator {
 			String newExpression = expression.substring(0, extractLeftNumber(expression, index))
 					+ result
 					+ expression.substring(extractRightNumber(expression, index + 1));
-
+			
 
 			return performMDOperations(newExpression);
 		}
 
-		if (expression.contains("/")) {
-			int index = expression.lastIndexOf("/");
+		if ( divIndex != -1 && (mulIndex == -1 || divIndex < mulIndex) ) {
+			index = divIndex;
 
 			// This is where the expression is split into two parts
 			String left = expression.substring(extractLeftNumber(expression, index - 1), index);
@@ -373,7 +386,7 @@ public class Calculator implements ICalculator {
 			String newExpression = expression.substring(0, extractLeftNumber(expression, index))
 					+ result
 					+ expression.substring(extractRightNumber(expression, index + 1));
-
+			
 
 			return performMDOperations(newExpression);
 		}
@@ -450,6 +463,9 @@ public class Calculator implements ICalculator {
 	
 	
 	private double performASOperations ( String expression ) {
+		expression = cleanExpression(expression);
+		expression = simplifyExpression(expression);
+		
 
 		if ( expression.charAt(0) == '+' || expression.charAt(0) == '-' ) {
 

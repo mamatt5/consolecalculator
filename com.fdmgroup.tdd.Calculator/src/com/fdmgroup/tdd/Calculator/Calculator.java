@@ -96,13 +96,50 @@ public class Calculator implements ICalculator {
 			
 			throw new IllegalArgumentException("Zero raised to zero is undefined");
 		}
+		
+		// Case for fractional exponents. The return will separate the whole number from the fractional part to get the root.
+		if ( exponent%1 != 0) {
+			
+			return multiply( power(base,exponent-exponent%1), fractionalPower( base, exponent%1 ));
+		}
 
 		return base * power(base, exponent - 1);
 	}
 	
 	
+	// Fractional exponent operation
 	
+	/**
+	 * This operator iteratively evaluates nth root using Newton-Raphson Method. Documentation for Newton-Raphson can be
+	 * shown in this website: https://calcworkshop.com/derivatives/newtons-method/
+	 * 
+	 * @param base Base number
+	 * @param fraction Fractional exponent evaluated from the power() method
+	 * @return Calls the nthRoot recursive function to evaluate the root
+	 */
+	
+	public double fractionalPower( double base, double fraction ) {
+		
+		// Use 1 as initial guess. Can be further improved.
+		return nthRoot(base, 1/fraction, 1);
+	}
+	
+	
+	// Newton's iterative approach to solving for roots.
+	public double nthRoot( double base, double n, double guess ) {
+		
+		// This is Newton-Raphson method for approximation of roots. Derivation of the formula can be found from website above.
+		double newGuess = (1/n)*((n-1) * guess + base / power(guess,n-1));
+		
+		// Since Math library (absolute value) cannot be used, the tolerance is squared.
+		if ( (newGuess-guess)*(newGuess-guess) < 0.000000001) {
+			return newGuess;
+		}
+		return nthRoot (base, n, newGuess);
+	}
 
+	
+	
 	// Cleaner Methods
 
 	// Method to adjust expressions with combinations of operators ex. "++", "--", "+-", "-+", ...

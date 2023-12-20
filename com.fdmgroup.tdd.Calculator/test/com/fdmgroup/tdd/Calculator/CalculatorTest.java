@@ -5,6 +5,9 @@ import org.junit.jupiter.api.Test;
 
 class CalculatorTest {
 	
+	// All checks are either done straight from Java's calculation or through 
+	// string input in Wolfram-Alpha's calculator: https://www.wolframalpha.com/
+	
 	Calculator calculator = new Calculator();
 	
 	// Tests for basic math operations
@@ -40,6 +43,7 @@ class CalculatorTest {
 		
 		assertThrows(IllegalArgumentException.class, () -> {calculator.divide(0, 0);});
 	}
+	
 	
 	
 	
@@ -83,6 +87,7 @@ class CalculatorTest {
 	
 	
 	
+	
 	// Tests for performing basic operations from string input
 	
 	@Test
@@ -119,6 +124,7 @@ class CalculatorTest {
 		
 		assertEquals(result, calculator.evaluate("2/1"));
 	}
+	
 	
 	
 	
@@ -179,6 +185,7 @@ class CalculatorTest {
 		
 		assertEquals(result, calculator.evaluate("-4/-1"));
 	}
+	
 	
 	
 	
@@ -317,6 +324,7 @@ class CalculatorTest {
 		
 		assertEquals(result, calculator.evaluate("1*+44-5/-1"));
 	}
+	
 	
 	
 	
@@ -514,6 +522,19 @@ class CalculatorTest {
 		assertEquals(result, calculator.evaluate("-3*-2^2/5+5*8+3^2"));
 	}
 	
+	@Test
+	void nested_exponents() {
+		
+		assertEquals(65536 , calculator.evaluate("2^2^2^2"));
+	}
+	
+	@Test
+	void nested_exponents2() {
+		
+		assertEquals(512, calculator.evaluate("2^3^2"));
+	}
+	
+	
 	
 	
 	// Tests for exponential operations with parenthesis
@@ -531,6 +552,46 @@ class CalculatorTest {
 		
 		assertEquals(196631, calculator.evaluate("68+2^(2*2)^2*3-45"));
 	}
+	
+	
+	
+	
+	// Tests for fractional exponents
+	
+	@Test
+	void fractional_exponent_squareroot() {
+		double result = Math.pow(4, 0.5);
+		
+		assertEquals(result, calculator.evaluate("4^0.5"),0.00001);
+	}
+	
+	@Test
+	void fractional_exponent_cube_root() {
+		double result = Math.pow(27, 0.33333333);
+		
+		assertEquals(result, calculator.evaluate("27^(1/3)"),0.00001);
+	}
+	
+	@Test
+	void fractional_exponent_point1_root() {
+		double result = Math.pow(4, 0.1);
+		
+		assertEquals(result, calculator.evaluate("4^0.1"),0.00001);
+	}
+	
+	@Test
+	void fractional_exponent3_fourth_root() {
+		double result = Math.pow(4, 0.25);
+		
+		assertEquals(result, calculator.evaluate("4^0.25"),0.00001);
+	}
+	
+	@Test
+	void fractional_exponent_8th_root() {
+		
+		assertEquals(1.189207115, calculator.evaluate("4^(1/8)"),0.00001);
+	}
+	
 	
 	
 	
@@ -557,12 +618,17 @@ class CalculatorTest {
 		assertEquals(result, calculator.evaluate("2 * (3 + (4 - 1) * (6 / 2))^2"));
 	}
 	
+	
 	@Test
+	// This test tries to input a string that is inverse BODMAS to check if the calculator correctly evaluates the expression
+	// in BODMAS order.
+	
 	void BODMAS_check() {
 		double result = 5-4+8*3/4*Math.pow(2, 2)-(7-4);
 		
 		assertEquals(result, calculator.evaluate("5-4+8*3/4*2^2-(7-4)"));
 	}
+	
 	@Test
 	void final_test_all_operations() {
 		
@@ -574,6 +640,12 @@ class CalculatorTest {
 	{
 		double result = 2*((2+Math.pow(1+3,2)*2+2)+5+(2.5*20/(1+5-5*4)+2)+8/2*7+2+8*(200/5-15*5));
 		assertEquals(result, calculator.evaluate("2*((2+(1+3)^2*2+2)+5+(2.5*20/(1+5-5*4)+2)+8/2*7+2--8*(200/5-15*5))"));
+	}
+	
+	@Test
+	void final_test_all_operations_with_fractional_exponent()
+	{
+		assertEquals(-490.01269, calculator.evaluate("2*((2+(1+3)^2*2+2)^(1/8)+5+(2.5*20/(1+5-5*4)+2)+8/2*7+2--8*(200/5-15*5))"), 0.0001);
 	}
 	
 	

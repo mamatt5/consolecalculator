@@ -41,6 +41,8 @@ class CalculatorTest {
 		assertThrows(IllegalArgumentException.class, () -> {calculator.divide(0, 0);});
 	}
 	
+	
+	
 	// Tests for invalid arguments
 	
 	@Test
@@ -79,6 +81,8 @@ class CalculatorTest {
 		assertThrows(IllegalArgumentException.class, () -> {calculator.evaluate("1+1+/1");});
 	}
 	
+	
+	
 	// Tests for performing basic operations from string input
 	
 	@Test
@@ -96,6 +100,13 @@ class CalculatorTest {
 	}
 	
 	@Test
+	void subtraction_0_minus_1_equals_negative_1_from_string() {
+		double result = 0-1;
+		
+		assertEquals(result, calculator.evaluate("0-1"));
+	}
+	
+	@Test
 	void multiplication_times_1_equals_2_from_string() {
 		double result = 2*1;
 		
@@ -108,6 +119,8 @@ class CalculatorTest {
 		
 		assertEquals(result, calculator.evaluate("2/1"));
 	}
+	
+	
 	
 	// Tests for performing double operations "+-", "--", "*-", etc.
 	
@@ -159,6 +172,14 @@ class CalculatorTest {
 		
 		assertEquals(result, calculator.evaluate("4/-1"));
 	}
+	
+	@Test
+	void double_operator_negative_divide_minus_operation() {
+		double result = -4/-1;
+		
+		assertEquals(result, calculator.evaluate("-4/-1"));
+	}
+	
 	
 	
 	// Tests for multiple operations
@@ -284,10 +305,10 @@ class CalculatorTest {
 	}
 	
 	@Test
-	void multiple_operations_with_times_plus_double_operator_multiply_divide_order_check() {
-		double result = 8/2*7/4*9;
+	void multiple_operations_with_divide_minus_double_operator_multiply_divide_order_check() {
+		double result = 8/2*7/-4*9;
 		
-		assertEquals(result, calculator.evaluate("8/2*7/4*9"));
+		assertEquals(result, calculator.evaluate("8/2*7/-4*9"));
 	}
 	
 	@Test
@@ -296,6 +317,7 @@ class CalculatorTest {
 		
 		assertEquals(result, calculator.evaluate("1*+44-5/-1"));
 	}
+	
 	
 	
 	// Tests for brackets handling
@@ -378,28 +400,28 @@ class CalculatorTest {
 	}
 	
 	@Test
-	void multiple_bracket_single_operation_plus() {
+	void nested_bracket_single_operation_plus() {
 		double result = ((1+1));
 		
 		assertEquals(result, calculator.evaluate("((1+1))"));
 	}
 	
 	@Test
-	void multiple_bracket_single_operation_minus() {
+	void nested_bracket_single_operation_minus() {
 		double result = ((1-1));
 		
 		assertEquals(result, calculator.evaluate("((1-1))"));
 	}
 	
 	@Test
-	void multiple_bracket_single_operation_times() {
+	void nested_bracket_single_operation_times() {
 		double result = ((1*1));
 		
 		assertEquals(result, calculator.evaluate("((1*1))"));
 	}
 	
 	@Test
-	void multiple_bracket_single_operation_divide() {
+	void nested_bracket_single_operation_divide() {
 		double result = ((1/1));
 		
 		assertEquals(result, calculator.evaluate("((1/1))"));
@@ -426,6 +448,8 @@ class CalculatorTest {
 		assertEquals(result, calculator.evaluate("((1+3)+4*6+(7*8)-(4-(8*3)))*8"));
 	}
 	
+	
+	
 	// Tests for simple exponential operations
 	
 	@Test
@@ -490,6 +514,8 @@ class CalculatorTest {
 		assertEquals(result, calculator.evaluate("-3*-2^2/5+5*8+3^2"));
 	}
 	
+	
+	
 	// Tests for exponential operations with parenthesis
 	
 	@Test
@@ -505,6 +531,7 @@ class CalculatorTest {
 		
 		assertEquals(196631, calculator.evaluate("68+2^(2*2)^2*3-45"));
 	}
+	
 	
 	
 	// Tests for more complex calculations
@@ -540,7 +567,6 @@ class CalculatorTest {
 	void final_test_all_operations() {
 		
 		assertEquals(-90.5041667, calculator.evaluate("-3*((2)^2/5+5*8)-(4+3*(2.5^2-(1/3)^2)/4)+(7-2.5)*(6/2)^2"), 0.0001);
-
 	}
 
 	@Test

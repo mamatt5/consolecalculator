@@ -99,6 +99,9 @@ public class Calculator implements ICalculator {
 
 		return base * power(base, exponent - 1);
 	}
+	
+	
+	
 
 	// Cleaner Methods
 
